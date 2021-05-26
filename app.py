@@ -1,15 +1,21 @@
 from flask import Flask, render_template
+import pandas as pd
+
 
 app = Flask(__name__)
 
 @app.route("/")
 
 def home():
-	return render_template("home.html")
+	xs = []
+	ys =[]
 
-@app.route("/page1")
-def page1():
-	return render_template("page1.html")
+	df = pd.read_csv('TSLA.csv')
+
+	x =df.iloc[:, 0]
+	y = df.iloc[:,1]
+
+	return render_template("home.html",xs = x, ys=y)
 
 if __name__ == "__main__":
 	app.run()

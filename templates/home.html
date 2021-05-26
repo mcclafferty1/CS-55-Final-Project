@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>MarketInform Inc.</title>
-
     <link rel="stylesheet" href="{{ url_for('static',    filename='home.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',    filename='bootstrap.min.css') }}">
     <style>
@@ -15,6 +14,7 @@
         text-align: center;
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js"></script> 
   </head>
   <body style="background-color:antiquewhite">
     <header>
@@ -39,6 +39,7 @@
       </div>
     </nav>
     </header>
+
     <div class="container">
       <h1 style = "font-family:georgia,garamond,serif;font-size:38px;font-style:bold;"> MarketInform Inc. </h1>
       <hr>
@@ -222,10 +223,57 @@
           </script>
         </div>
         <!-- TradingView Widget END -->
+        
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+          chartIt();
+          async function chartIt(){
+            const datasets = await getData();
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: datasets.xs,
+                    datasets: [{
+                        label: 'Price',
+                        data: datasets.ys,
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(255, 159, 64, 1)'],
+                        borderWidth: 1
+                    }]
+                }
+            });
+          }
+            
+          async function getData(){
+            const xs = [];
+            const ys =[];
+
+            const response = await fetch('TSLA.csv');
+            const data = await response.text();
+
+            const table = data.split('\n').slice(1);
+            table.forEach(row => {
+              const columns = row.split(',');
+              const year = columns[0];
+              xs.push(year);
+              const price = columns[1];
+              ys.push(price);
+              console.log(year, price);
+            });
+            return {xs, ys};
+
+          }
+
+        </script>
       </p>
     </div>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script src="{{ url_for('static',    filename='bootstrap.min.js') }}"></script>
   </body>
