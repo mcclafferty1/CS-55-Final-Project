@@ -1,3 +1,5 @@
+<!-- This file is no longer used, please see index.html for the latest front end display -->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -223,55 +225,57 @@
           </script>
         </div>
         <!-- TradingView Widget END -->
-        
+      </p>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+      <p>
         <canvas id="myChart" width="400" height="400"></canvas>
         <script>
-          chartIt();
-          async function chartIt(){
-            const datasets = await getData();
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: datasets.xs,
-                    datasets: [{
-                        label: 'Price',
-                        data: datasets.ys,
-                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
-                        borderColor: ['rgba(255, 159, 64, 1)'],
-                        borderWidth: 1
-                    }]
-                }
-            });
-          }
-            
-          async function getData(){
-            const xs = [];
-            const ys =[];
+          // const api_url = "https://api.covid19api.com/summary";
+          // async function getData(){
+          //   const response = await fetch(api_url);
+          //   const data = await response.json();
+          //   const {Country, TotalDeaths} = data;
+          //   console.log("data is": data.Country);
+          //   return {Country, TotalDeaths};
+          //   // const table = data.split('\n').slice(1);
+          //   // table.forEach(row => {
+          //   //   const column = row.split(',');
+          //   //   const 
+          //   // })
+          // }
+          // getData();
 
-            const response = await fetch('TSLA.csv');
-            const data = await response.text();
+          // const covidData = await getData();
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: ['a','b','c','d','e'],
+                  datasets: [{
+                      label: '# of Votes',
+                      data: [1,2,3,5,6],
+                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
 
-            const table = data.split('\n').slice(1);
-            table.forEach(row => {
-              const columns = row.split(',');
-              const year = columns[0];
-              xs.push(year);
-              const price = columns[1];
-              ys.push(price);
-              console.log(year, price);
-            });
-            return {xs, ys};
 
-          }
+
 
         </script>
-      </p>
-    </div>
-      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    
 
-    
+
+      </p>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
