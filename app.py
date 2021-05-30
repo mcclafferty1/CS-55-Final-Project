@@ -23,12 +23,12 @@ def home():
 @app.route("/stock/<stock>", methods=['GET'])
 
 def stock_sentiment(stock):
-	return "The stock is " + str(stock)
+	return str(8.43)
 
 @app.route("/industry_sentiment", methods=['GET'])
 
 def industry_sentiment():
-	return "This is the industry sentiment"
+	return "The industry sentiment is " + str(8.45)
 
 if __name__ == "__main__":
 	app.run()
