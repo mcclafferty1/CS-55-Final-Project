@@ -20,10 +20,15 @@ def home():
 
 	return render_template("index.html")
 
-@app.route("/", methods=['POST'])
+@app.route("/stock/<stock>", methods=['GET'])
 
-def joseph_code():
-	
+def stock_sentiment(stock):
+	return "The stock is " + str(stock)
+
+@app.route("/industry_sentiment", methods=['GET'])
+
+def industry_sentiment():
+	return "This is the industry sentiment"
 
 if __name__ == "__main__":
 	app.run()
