@@ -1,4 +1,4 @@
-from types import MethodDescriptorType
+# from types import MethodDescriptorType
 from flask import Flask, render_template
 # import pandas as pd
 from flask import json
@@ -19,6 +19,11 @@ def home():
 	# yp = zip(year,price)
 
 	return render_template("index.html")
+
+@app.route("/", methods=['POST'])
+
+def joseph_code():
+	
 
 if __name__ == "__main__":
 	app.run()
