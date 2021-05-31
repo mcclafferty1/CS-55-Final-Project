@@ -358,10 +358,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-bar-item"><h5><b><strong>Stock Sentiment</strong></b></h5></div>
         <div class="w3-right">
             <div class="search-container",>
-                <form action="/individual-stick">
-                  <input type="text" placeholder="Search.." name="search">
-                  <button type="submit">Submit</button>
-                </form>
+                  <input id="submit-stock" type="text" placeholder="AAPL" name="search">
+                  <button id="submit-button" onclick="updateChart">Submit</button>
             </div>
         </div>
 
@@ -373,10 +371,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['0', '1', '2', '3'],
             datasets: [{
                 label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                data: [-.6, .4, .3, .5],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -401,12 +399,28 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             responsive: false,
             scales: {
                 y: {
-                    beginAtZero: true
-                }
+                    suggestedMin: -1,
+                    suggestedMax: 1                }
             }
         }
     });
     
+    </script>
+    <script>
+        
+        function updateChart(){
+            $.ajax({
+                type: 'GET', //post method
+                url: '/stock/'+document.getElementById('submit-stock').value, //ajaxformexample url
+                dataType: "json",
+                success: function (result, textStatus, jqXHR)
+                {
+                    myChart.data.datasets[0].data = result;
+                    myChart.update();
+                }
+            });
+        }
+        document.getElementById("submit-button").addEventListener("click", updateChart);
     </script>
 
     <!-- Need to make the stock symbol dynamic -->
