@@ -225,134 +225,147 @@ def home():
 
 @app.route("/stock/<stock>", methods=['GET'])
 def stock_sentiment(stock):
-    cik_lookup = {stock: '0001018724'}
-    # print("Hello")
-    sec_api = project_helper.SecAPI()
+    all_stock_data = pd.read_csv('./CompanySentiment1.csv')
 
-    #for k in range(1):
-    k=0
-    ten_ks_by_ticker=main_get_files(k, cik_lookup,sec_api)
+    stock_data = all_stock_data.loc[all_stock_data['ticker'] == stock]
+    final_stock_data = stock_data[['date']]
 
-    master1_ten_ks_by_ticker = {}
-    seen_before = {}
-
-    for ticks, ten_ks in ten_ks_by_ticker.items():
-        # i=i+1
-        master1_ten_ks_by_ticker[ticks] = []
-
-        for line in ten_ks_by_ticker[ticks]:
-            sign = line['file_date'] + ticks
-            if sign not in seen_before:
-                # print(line['file_date'])
-                seen_before[line['file_date'] + ticks] = 1
-                master1_ten_ks_by_ticker[ticks].append(line)
-
-    master_ten_ks_by_ticker = {}
-    for tics, ten_kz in master1_ten_ks_by_ticker.items():
-        master_ten_ks_by_ticker[tics] = []
-        largest = '2001-01-01'
-        # print(len(master_ten_ks_by_ticker[tics]))
-        while len(master1_ten_ks_by_ticker[tics]) > 0:
-            largest = '2001-01-01'
-            # print(len(master_ten_ks_by_ticker[tics]))
-            for line in master1_ten_ks_by_ticker[tics]:
-                if datetime.datetime.strptime(line['file_date'], '%Y-%m-%d') > datetime.datetime.strptime(largest,
-                                                                                                          '%Y-%m-%d'):
-                    largest = line['file_date']
-                    largestfile = line
-
-            for line in master1_ten_ks_by_ticker[tics]:
-                if datetime.datetime.strptime(line['file_date'], '%Y-%m-%d') == datetime.datetime.strptime(largest,
-                                                                                                           '%Y-%m-%d'):
-                    master_ten_ks_by_ticker[tics].append(line)
-                    master1_ten_ks_by_ticker[tics].remove(line)
-
-    for ticker, ten_ks in master_ten_ks_by_ticker.items():
-        for ten_k in ten_ks:
-            ten_k['file_clean'] = clean_text(ten_k['ten_q'])
-
-    word_pattern = re.compile('\w+')
-
-    for ticker, ten_ks in master_ten_ks_by_ticker.items():
-        for ten_k in ten_ks:
-            ten_k['file_lemma'] = lemmatize_words(word_pattern.findall(ten_k['file_clean']))
-
-    lemma_english_stopwords = lemmatize_words(stopwords.words('english'))
-
-    for ticker, ten_ks in master_ten_ks_by_ticker.items():
-        for ten_k in ten_ks:
-            ten_k['file_lemma'] = [word for word in ten_k['file_lemma'] if word not in lemma_english_stopwords]
-
-    print('Stop Words Removed')
-
-    sentiments = ['negative', 'positive', 'uncertainty', 'litigious', 'constraining', 'interesting']
-
-    #sentiment_df = pd.read_csv(os.path.join('..', '..', 'data', 'project_5_loughran_mcdonald', 'loughran_mcdonald_master_dic_2018.csv'))
-    #sentiment_df = pd.read_csv(os.path.join("Desktop","CompLitProjFiles","LoughranMcDonald_MasterDictionary_2018.csv")
-    sentiment_df = pd.read_csv(
-        "./LoughranMcDonald_MasterDictionary_2018.csv")
-    sentiment_df.columns = [column.lower() for column in sentiment_df.columns]  # Lowercase the columns for ease of use
-
-    # Remove unused information
-    sentiment_df = sentiment_df[sentiments + ['word']]
-    sentiment_df[sentiments] = sentiment_df[sentiments].astype(bool)
-    sentiment_df = sentiment_df[(sentiment_df[sentiments]).any(1)]
-
-    # Apply the same preprocessing to these words as the 10-k words
-    sentiment_df['word'] = lemmatize_words(sentiment_df['word'].str.lower())
-    sentiment_df = sentiment_df.drop_duplicates('word')
-
-    master_dict = {}
-    for index, row in sentiment_df.iterrows():
-        master_dict[row['word']] = 1
-    #q_dict = {}
-    #for ticker, ten_ks in master_ten_ks_by_ticker.items():
-        # print(ten_ks)
-        #for ten_k in ten_ks:
-            #document1 = ""
-            #print(len(ten_k))
-            #for word in ten_k["file_lemma"]:
-                #if word in master_dict:
-                    #document1 = document1 + " " + word
-
-    q_dict = {}
-    for ticker, ten_ks in master_ten_ks_by_ticker.items():
-        lemma_docs = [' '.join(ten_k['file_lemma']) for ten_k in ten_ks]
-        for docs in lemma_docs:
-            # print(docs[12:19])
-            master_string = ""
-            for word in docs.split(" "):
-                if word in master_dict:
-                    master_string = master_string + " " + word
-            q_dict[docs[12:19]] = master_string
-    print(q_dict.keys())
-
-    list0=[]
-    for datenames in q_dict.keys():
-        list0.append(datenames)
+    for index, row in stock_data.iterrows():
+        document = row['document']
+        strings = document.split()
+        final_stock_data['sentiment'] = (strings[10][:-1])
 
 
-    authenticator = IAMAuthenticator('be5tVVZfmsFUh572Se2nencOEgqVCzUvZZZukhU5XB58')
-    natural_language_understanding = NaturalLanguageUnderstandingV1(
-        version='2020-08-01',
-        authenticator=authenticator
-    )
+    print(final_stock_data)
+    return final_stock_data.to_json(orient = "records")
+    # cik_lookup = {stock: '0001018724'}
+    # # print("Hello")
+    # sec_api = project_helper.SecAPI()
 
-    natural_language_understanding.set_service_url(
-        'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/8b1fe085-04ac-4040-93d5-537db24382e1')
+    # #for k in range(1):
+    # k=0
+    # ten_ks_by_ticker=main_get_files(k, cik_lookup,sec_api)
 
-    response = natural_language_understanding.analyze(
-        # url='www.wsj.com/news/markets',
-        #text=q_dict['2019630'],
-        text=q_dict[list0[0]],
-        features=Features(
-            #language="en",
-            emotion=EmotionOptions(),
-            sentiment=SentimentOptions())).get_result()
+    # master1_ten_ks_by_ticker = {}
+    # seen_before = {}
+
+    # for ticks, ten_ks in ten_ks_by_ticker.items():
+    #     # i=i+1
+    #     master1_ten_ks_by_ticker[ticks] = []
+
+    #     for line in ten_ks_by_ticker[ticks]:
+    #         sign = line['file_date'] + ticks
+    #         if sign not in seen_before:
+    #             # print(line['file_date'])
+    #             seen_before[line['file_date'] + ticks] = 1
+    #             master1_ten_ks_by_ticker[ticks].append(line)
+
+    # master_ten_ks_by_ticker = {}
+    # for tics, ten_kz in master1_ten_ks_by_ticker.items():
+    #     master_ten_ks_by_ticker[tics] = []
+    #     largest = '2001-01-01'
+    #     # print(len(master_ten_ks_by_ticker[tics]))
+    #     while len(master1_ten_ks_by_ticker[tics]) > 0:
+    #         largest = '2001-01-01'
+    #         # print(len(master_ten_ks_by_ticker[tics]))
+    #         for line in master1_ten_ks_by_ticker[tics]:
+    #             if datetime.datetime.strptime(line['file_date'], '%Y-%m-%d') > datetime.datetime.strptime(largest,
+    #                                                                                                       '%Y-%m-%d'):
+    #                 largest = line['file_date']
+    #                 largestfile = line
+
+    #         for line in master1_ten_ks_by_ticker[tics]:
+    #             if datetime.datetime.strptime(line['file_date'], '%Y-%m-%d') == datetime.datetime.strptime(largest,
+    #                                                                                                        '%Y-%m-%d'):
+    #                 master_ten_ks_by_ticker[tics].append(line)
+    #                 master1_ten_ks_by_ticker[tics].remove(line)
+
+    # for ticker, ten_ks in master_ten_ks_by_ticker.items():
+    #     for ten_k in ten_ks:
+    #         ten_k['file_clean'] = clean_text(ten_k['ten_q'])
+
+    # word_pattern = re.compile('\w+')
+
+    # for ticker, ten_ks in master_ten_ks_by_ticker.items():
+    #     for ten_k in ten_ks:
+    #         ten_k['file_lemma'] = lemmatize_words(word_pattern.findall(ten_k['file_clean']))
+
+    # lemma_english_stopwords = lemmatize_words(stopwords.words('english'))
+
+    # for ticker, ten_ks in master_ten_ks_by_ticker.items():
+    #     for ten_k in ten_ks:
+    #         ten_k['file_lemma'] = [word for word in ten_k['file_lemma'] if word not in lemma_english_stopwords]
+
+    # print('Stop Words Removed')
+
+    # sentiments = ['negative', 'positive', 'uncertainty', 'litigious', 'constraining', 'interesting']
+
+    # #sentiment_df = pd.read_csv(os.path.join('..', '..', 'data', 'project_5_loughran_mcdonald', 'loughran_mcdonald_master_dic_2018.csv'))
+    # #sentiment_df = pd.read_csv(os.path.join("Desktop","CompLitProjFiles","LoughranMcDonald_MasterDictionary_2018.csv")
+    # sentiment_df = pd.read_csv(
+    #     "./LoughranMcDonald_MasterDictionary_2018.csv")
+    # sentiment_df.columns = [column.lower() for column in sentiment_df.columns]  # Lowercase the columns for ease of use
+
+    # # Remove unused information
+    # sentiment_df = sentiment_df[sentiments + ['word']]
+    # sentiment_df[sentiments] = sentiment_df[sentiments].astype(bool)
+    # sentiment_df = sentiment_df[(sentiment_df[sentiments]).any(1)]
+
+    # # Apply the same preprocessing to these words as the 10-k words
+    # sentiment_df['word'] = lemmatize_words(sentiment_df['word'].str.lower())
+    # sentiment_df = sentiment_df.drop_duplicates('word')
+
+    # master_dict = {}
+    # for index, row in sentiment_df.iterrows():
+    #     master_dict[row['word']] = 1
+    # #q_dict = {}
+    # #for ticker, ten_ks in master_ten_ks_by_ticker.items():
+    #     # print(ten_ks)
+    #     #for ten_k in ten_ks:
+    #         #document1 = ""
+    #         #print(len(ten_k))
+    #         #for word in ten_k["file_lemma"]:
+    #             #if word in master_dict:
+    #                 #document1 = document1 + " " + word
+
+    # q_dict = {}
+    # for ticker, ten_ks in master_ten_ks_by_ticker.items():
+    #     lemma_docs = [' '.join(ten_k['file_lemma']) for ten_k in ten_ks]
+    #     for docs in lemma_docs:
+    #         # print(docs[12:19])
+    #         master_string = ""
+    #         for word in docs.split(" "):
+    #             if word in master_dict:
+    #                 master_string = master_string + " " + word
+    #         q_dict[docs[12:19]] = master_string
+    # print(q_dict.keys())
+
+    # list0=[]
+    # for datenames in q_dict.keys():
+    #     list0.append(datenames)
+
+
+    # authenticator = IAMAuthenticator('be5tVVZfmsFUh572Se2nencOEgqVCzUvZZZukhU5XB58')
+    # natural_language_understanding = NaturalLanguageUnderstandingV1(
+    #     version='2020-08-01',
+    #     authenticator=authenticator
+    # )
+
+    # natural_language_understanding.set_service_url(
+    #     'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/8b1fe085-04ac-4040-93d5-537db24382e1')
+
+    # response = natural_language_understanding.analyze(
+    #     # url='www.wsj.com/news/markets',
+    #     #text=q_dict['2019630'],
+    #     text=q_dict[list0[0]],
+    #     features=Features(
+    #         #language="en",
+    #         emotion=EmotionOptions(),
+    #         sentiment=SentimentOptions())).get_result()
 
 
 
-    return jsonify([response['sentiment']['document']['score']])
+    # return jsonify([response['sentiment']['document']['score']])
 
 
 @app.route("/industry_sentiment", methods=['GET'])
