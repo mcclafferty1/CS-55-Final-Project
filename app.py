@@ -2,6 +2,8 @@
 from flask import Flask, render_template, jsonify
 # import pandas as pd
 from flask import json
+from flask_cors import CORS
+
 import requests
 import nltk
 import matplotlib.pyplot as plt
@@ -205,7 +207,7 @@ def main_get_files(k, cik_lookup,sec_api):
 # Old Code Below
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/", methods=['GET'])
 def home():
@@ -288,7 +290,7 @@ def stock_sentiment(stock):
     #sentiment_df = pd.read_csv(os.path.join('..', '..', 'data', 'project_5_loughran_mcdonald', 'loughran_mcdonald_master_dic_2018.csv'))
     #sentiment_df = pd.read_csv(os.path.join("Desktop","CompLitProjFiles","LoughranMcDonald_MasterDictionary_2018.csv")
     sentiment_df = pd.read_csv(
-        "/Users/danny/OneDrive - Dartmouth College/Documents/Shared CS 55 Project/LoughranMcDonald_MasterDictionary_2018.csv")
+        "./LoughranMcDonald_MasterDictionary_2018.csv")
     sentiment_df.columns = [column.lower() for column in sentiment_df.columns]  # Lowercase the columns for ease of use
 
     # Remove unused information

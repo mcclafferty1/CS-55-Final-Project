@@ -414,7 +414,26 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         $('#spinner').hide();
         function updateChart(){
             $('#spinner').show();
-            var stock_name = document.getElementById('submit-stock').value
+            var stock_name = document.getElementById('submit-stock').value;
+
+            // updates news for the stock
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.us-east.discovery.watson.cloud.ibm.com/instances/7e96e162-cf60-4640-8883-e2f6ab8cb9e3/v1/environments/system/collections/news-en/query?version=2019-04-30&query=enriched_text.entities.text:' + stock_name,
+                dataType: 'json',
+                headers: {
+                    "Authorization" : "Basic " + btoa("apikey:vTWFnFl3TDWpVX1Ha4EnQRyurIHObQuIcU3Xykldpnhy")
+                },
+                success: function (data){
+                    $('#stock-news-1').html('<a target="_blank" href="'+ data.results[0].url +'">'+ data.results[0].title +'</a>');
+                    $('#stock-news-2').html('<a target="_blank" href="'+ data.results[1].url +'">'+ data.results[1].title +'</a>');
+                    $('#stock-news-3').html('<a target="_blank" href="'+ data.results[2].url +'">'+ data.results[2].title +'</a>');
+                  }
+                //crossDomain: true,
+                //dataType: 'jsonp',
+            });
+
+            
             $.ajax({
                 type: 'GET', //post method
                 url: '/stock/'+stock_name, //ajaxformexample url
@@ -426,6 +445,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
                     myChart.update();
                 }
             });
+
 
             $("#stock-chart").replaceWith("<!-- Need to make the stock symbol dynamic -->\r\n    <div id=\"stock-chart\" class=\"tradingview-widget-container\">\r\n        <h5>Price Movements<\/h5>\r\n        <div id=\"tradingview_3242d\"><\/div>\r\n        <div class=\"tradingview-widget-copyright\"><a href=\"https:\/\/www.tradingview.com\/symbols\/" + stock_name + "\/\" rel=\"noopener\" target=\"_blank\"><span class=\"blue-text\">"+ stock_name +"<\/span><\/a> by TradingView<\/div>\r\n        <script type=\"text\/javascript\" src=\"https:\/\/s3.tradingview.com\/tv.js\"><\/script>\r\n        <script type=\"text\/javascript\">\r\n        new TradingView.MediumWidget(\r\n        {\r\n        \"symbols\": [\r\n        [\r\n            \""+ stock_name +"\",\r\n            \"" + stock_name + "\"\r\n        ]\r\n        ],\r\n        \"chartOnly\": false,\r\n        \"width\": 1500,\r\n        \"height\": 480,\r\n        \"locale\": \"en\",\r\n        \"colorTheme\": \"light\",\r\n        \"gridLineColor\": \"#F0F3FA\",\r\n        \"trendLineColor\": \"#2196F3\",\r\n        \"fontColor\": \"#787B86\",\r\n        \"underLineColor\": \"#E3F2FD\",\r\n        \"isTransparent\": false,\r\n        \"autosize\": false,\r\n        \"container_id\": \"tradingview_3242d\"\r\n    }\r\n        );\r\n        <\/script>\r\n    <\/div>\r\n  <\/div>");
         }
@@ -472,13 +492,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <h5>Recent News</h5>
     <ul class="w3-ul w3-card-4 w3-white">
       <li class="w3-padding-16">
-        <span class="w3-xlarge">News 1</span><br>
+        <span id="stock-news-1" class="w3-xlarge">News 1</span><br>
       </li>
       <li class="w3-padding-16">
-        <span class="w3-xlarge">News 2</span><br>
+        <span id="stock-news-2" class="w3-xlarge">News 2</span><br>
       </li>
       <li class="w3-padding-16">
-        <span class="w3-xlarge">News 3</span><br>
+        <span id="stock-news-3" class="w3-xlarge">News 3</span><br>
       </li>
     </ul>
   </div>
@@ -516,6 +536,5 @@ function w3_close() {
   overlayBg.style.display = "none";
 }
 </script>
-
 </body>
 </html>
