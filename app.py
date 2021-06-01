@@ -229,11 +229,14 @@ def stock_sentiment(stock):
 
     stock_data = all_stock_data.loc[all_stock_data['ticker'] == stock]
     final_stock_data = stock_data[['date']]
+    sentiment = []
 
     for index, row in stock_data.iterrows():
         document = row['document']
         strings = document.split()
-        final_stock_data['sentiment'] = (strings[10][:-1])
+        sentiment.append(strings[10][:-1])
+
+    final_stock_data['sentiment'] = sentiment
 
 
     print(final_stock_data)
