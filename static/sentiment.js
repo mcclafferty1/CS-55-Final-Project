@@ -1,14 +1,22 @@
 $( document ).ready(function() {
-    $.get( "industry_sentiment", function( data ) {
-	  $( "#tech-sentiment" ).html( data );
-	  $( "#finance-sentiment" ).html( data );
-	  $( "#ag-sentiment" ).html( data );
-	  $( "#consumer-sentiment" ).html( data );
-	  $( "#energy-sentiment" ).html( data );
-	  $( "#automobile-sentiment" ).html( data );
-	  $( "#re-sentiment" ).html( data );
-	  $( "#pharma-sentiment" ).html( data );
-	});
+	$.ajax({
+    	type: 'GET',
+    	url: 'industry_sentiment',
+		dataType: 'json',
+		success: function (data){
+		    var sentiment_text = "Sentiment: ";
+	  	$( "#tech-sentiment" ).html( sentiment_text + data['Tech'] );
+	  	//$( "#tech-sentiment" ).html( "Stuff" );
+
+	  	$( "#finance-sentiment" ).html( data );
+	  	$( "#ag-sentiment" ).html( data );
+	  	$( "#consumer-sentiment" ).html( data );
+	  	$( "#energy-sentiment" ).html( sentiment_text + data['Energy'] );
+	  	$( "#automobile-sentiment" ).html( sentiment_text + data['Auto'] );
+	  	$( "#re-sentiment" ).html( data );
+	  	$( "#pharma-sentiment" ).html( data );
+		 }
+    });
 
 	$.ajax({
     	type: 'GET',
