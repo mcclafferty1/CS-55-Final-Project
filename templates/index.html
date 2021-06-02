@@ -417,10 +417,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             // updates news for the stock
             $.ajax({
                 type: 'GET',
-                url: 'https://api.us-east.discovery.watson.cloud.ibm.com/instances/7e96e162-cf60-4640-8883-e2f6ab8cb9e3/v1/environments/system/collections/news-en/query?version=2019-04-30&query=enriched_text.entities.text:' + stock_name,
+                url: 'https://api.us-south.discovery.watson.cloud.ibm.com/instances/d19e700b-3209-4869-a8bb-279a7b7c4e8a/v1/environments/system/collections/news-en/query?version=2019-04-30&query=enriched_text.entities.text:' + stock_name,
                 dataType: 'json',
                 headers: {
-                    "Authorization" : "Basic " + btoa("apikey:vTWFnFl3TDWpVX1Ha4EnQRyurIHObQuIcU3Xykldpnhy")
+                    "Authorization" : "Basic " + btoa("apikey:a-pugZwx81CeazpgllKNPgfWxIXBYGgpJj-qsIq4MsVb")
                 },
                 success: function (data){
                     $('#stock-news-1').html('<a target="_blank" href="'+ data.results[0].url +'">'+ data.results[0].title +'</a>');
