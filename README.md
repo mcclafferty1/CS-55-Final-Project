@@ -26,3 +26,5 @@ Daniel McClafferty, Joseph Januszewicz, and Ke Lou
 If the stock news does not update, that is likely because the maximum number of queries from Watson Discovery has been used.
 
 index.html contains code that was inspired by W3 schools and Chart.JS
+
+The WatsonProjectCodeVer2.ipynb file we included is not necessary to run the program, but it outlines the code that we used to generate the data in the FullComp1.csv file and cites the sources that were used to design the code and run it.
