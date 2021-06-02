@@ -1,3 +1,4 @@
+<!-- This code is all custom -->
 $( document ).ready(function() {
 	$.ajax({
     	type: 'GET',
@@ -6,8 +7,6 @@ $( document ).ready(function() {
 		success: function (data){
 		    var sentiment_text = "Sentiment: ";
 	  	$( "#tech-sentiment" ).html( sentiment_text + data['Tech'].toFixed(1) );
-	  	//$( "#tech-sentiment" ).html( "Stuff" );
-
 	  	$( "#finance-sentiment" ).html( sentiment_text + data['Finance'].toFixed(1) );
 	  	$( "#ag-sentiment" ).html( sentiment_text + data['Tech'].toFixed(1) );
 	  	$( "#cannabis-sentiment" ).html( sentiment_text + data['Cannabis'].toFixed(1) );
