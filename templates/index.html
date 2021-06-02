@@ -60,7 +60,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </header>
 
   
-
+<!-- Widget taken from trading view.com-->
   <div class="w3-row-padding w3-margin-bottom">
     <div class="w3-quarter">
         <div class="tradingview-widget-container">
@@ -83,6 +83,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             </script>
         </div>
     </div>
+<!-- Widget taken from trading view.com-->
     <div class="w3-quarter">
         <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -104,6 +105,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             </script>
         </div>
     </div>
+<!-- Widget taken from trading view.com-->
     <div class="w3-quarter">
         <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -127,6 +129,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
   </div>
 
+<!-- Widget taken from trading view.com-->
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
       <div class="w3-third">
@@ -410,6 +413,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     
     </script>
     <script>
+        // This block of code pulls three news articles from Watson Discovery about the stock entered into the search bar and displays them to the user
         $('#spinner').hide();
         function updateChart(){
             $('#spinner').show();
@@ -432,7 +436,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
                 //dataType: 'jsonp',
             });
 
-    //The initialization of the chart was inspired by the code used in the Chart.js Documentation
+            // This code updates the data in the chart to include the sentiment data about a stock pulled from the server
+            //The creation of the new chart was inspired by the code used in the Chart.js Documentation
 
             $.ajax({
                 type: 'GET', //post method
@@ -503,6 +508,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </script>
 
     <!-- Need to make the stock symbol dynamic -->
+    <!-- Code used from traderview.com --> 
     <div id="stock-chart" class="tradingview-widget-container">
         <h5>Price Movements</h5>
         <div id="tradingview_3242d"></div>
