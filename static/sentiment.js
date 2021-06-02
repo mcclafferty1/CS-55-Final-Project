@@ -5,16 +5,16 @@ $( document ).ready(function() {
 		dataType: 'json',
 		success: function (data){
 		    var sentiment_text = "Sentiment: ";
-	  	$( "#tech-sentiment" ).html( sentiment_text + data['Tech'] );
+	  	$( "#tech-sentiment" ).html( sentiment_text + data['Tech'].toFixed(1) );
 	  	//$( "#tech-sentiment" ).html( "Stuff" );
 
-	  	$( "#finance-sentiment" ).html( data );
-	  	$( "#ag-sentiment" ).html( data );
-	  	$( "#consumer-sentiment" ).html( data );
-	  	$( "#energy-sentiment" ).html( sentiment_text + data['Energy'] );
-	  	$( "#automobile-sentiment" ).html( sentiment_text + data['Auto'] );
-	  	$( "#re-sentiment" ).html( data );
-	  	$( "#pharma-sentiment" ).html( data );
+	  	$( "#finance-sentiment" ).html( sentiment_text + data['Finance'].toFixed(1) );
+	  	$( "#ag-sentiment" ).html( sentiment_text + data['Tech'].toFixed(1) );
+	  	$( "#cannabis-sentiment" ).html( sentiment_text + data['Cannabis'].toFixed(1) );
+	  	$( "#energy-sentiment" ).html( sentiment_text + data['Energy'].toFixed(1) );
+	  	$( "#automobile-sentiment" ).html( sentiment_text + data['Auto'].toFixed(1) );
+	  	$( "#re-sentiment" ).html( sentiment_text + data['Real Estate'].toFixed(1) );
+	  	$( "#pharma-sentiment" ).html( sentiment_text + data['Pharma'].toFixed(1) );
 		 }
     });
 

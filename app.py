@@ -225,7 +225,7 @@ def home():
 
 @app.route("/stock/<stock>", methods=['GET'])
 def stock_sentiment(stock):
-    all_stock_data = pd.read_csv('./Company1.csv')
+    all_stock_data = pd.read_csv('./FullComp1.csv')
 
     stock_data = all_stock_data.loc[all_stock_data['ticker'] == stock]
     final_stock_data = stock_data[['date']]
@@ -373,7 +373,7 @@ def stock_sentiment(stock):
 
 @app.route("/industry_sentiment", methods=['GET'])
 def industry_sentiment():
-    all_stock_data = pd.read_csv('./Company1.csv')
+    all_stock_data = pd.read_csv('./FullComp1.csv')
     industry_count = {}
 
     sentiment = []
