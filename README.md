@@ -23,7 +23,7 @@ Daniel McClafferty, Joseph Januszewicz, and Ke Lou
 
 ## ADDITIONAL NOTES
 
-If the stock news does not update, that is likely because the maximum number of queries from Watson Discovery has been used.
+If the stock news does not update, that is likely because the maximum number of queries from Watson Discovery has been used on our accounts. If this happens, feel free to slack us and we can connect a different account.
 
 index.html contains code that was inspired by W3 schools and Chart.JS
 
